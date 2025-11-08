@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>DSTU-Chat</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <script
+      type="text/javascript"
+      src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"
+    ></script>
+    <script type="text/javascript" src="chat.js"></script>
+    <script type="text/javascript">
+      var chat;
+
+      var name = prompt("Введите ваш ник:", "Koder");
+      if (!name || name === " ") {
+        name = "Koder";
+      }
+      name = name.replace(/(<([^>]+)>)/gi, "");
+
+      $(function () {
+        chat = new Chat();
+        window.chat = chat;
+
+        $("#name-area").html('Вы: <span>' + name + "</span>");
+
+        chat.getState();
+
+        setInterval(function () {
+          chat.update();
+        }, 1000);
+
+        $("#sendie").on("keydown", function (event) {
+          var key = event.which;
+          if (key >= 33) {
+            var maxLength = $(this).attr("maxlength");
+            var length = this.value.length;
+
+            if (length >= maxLength) {
+              event.preventDefault();
+            }
+          }
+        });
+
+        $("#sendie").on("keyup", function (event) {
+          var key = event.which;
+          if (key === 13) {
+            var text = $(this).val();
+            var maxLength = $(this).attr("maxlength");
+            var length = text.length;
+
+            if (length <= maxLength + 1) {
+              chat.send(text, name);
+              $(this).val("");
+            } else {
+              $(this).val(text.substring(0, maxLength));
+            }
+          }
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div id="page-wrap">
+      <center>
+        <h2>DSTU-Chat</h2>
+        <br />
+        <h3>"By Roma and Maga"</h3>
+      </center>
+
+      <p id="name-area"></p>
+
+      <div id="chat-wrap">
+        <div id="chat-area"></div>
+      </div>
+
+      <form id="send-message-area">
+        <center><p>Введите сообщение:</p></center>
+        <textarea id="sendie" maxlength="100"></textarea>
+      </form>
+    </div>
+  </body>
+</html>
