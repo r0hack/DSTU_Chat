@@ -5,10 +5,8 @@ Name: DSTU-Chat
 */
 
 var instanse = false;
-var state;
+var state = 0;
 var mes;
-var file;
-iconv("UTF-8", "WINDOWS-1251", $param);
 
 function Chat () {
     this.update = updateChat;
@@ -22,10 +20,9 @@ function getStateOfChat(){
 		 instanse = true;
 		 $.ajax({
 			   type: "POST",
-			   url: "process.php",
+  			   url: "process",
 			   data: {  
 			   			'function': 'getState',
-						'file': file
 						},
 			   dataType: "json",
 			
@@ -43,11 +40,10 @@ function updateChat(){
 		 instanse = true;
 	     $.ajax({
 			   type: "POST",
-			   url: "process.php",
+  			   url: "process",
 			   data: {  
-			   			'function': 'update',
-						'state': state,
-						'file': file
+  						'function': 'update',
+  						'state': state
 						},
 			   dataType: "json",
 			   success: function(data){
@@ -73,13 +69,12 @@ function sendChat(message, nickname)
     updateChat();
      $.ajax({
 		   type: "POST",
-		   url: "process.php",
-		   data: {  
-		   			'function': 'send',
-					'message': message,
-					'nickname': nickname,
-					'file': file
-				 },
+  		   url: "process",
+  		   data: {  
+  		   			'function': 'send',
+  					'message': message,
+  					'nickname': nickname
+  				 },
 		   dataType: "json",
 		   success: function(data){
 			   updateChat();
